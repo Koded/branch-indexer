@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CXP Branch Index</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+</head>
+<body>
+<div class="container">
+  <h1>Project Branch Index</h1>
+  <ul class="list-group">
+    <li class="list-group-item">
+      <a href="./master"><h3>Master</h3></a>
+    </li>
+  </ul>
+  <h2>Open Pull Requests</h2>
+  <ul class="list-group">
+  {{#each results.values}}
+    <li class="list-group-item">
+      <a href="./{{ slug title }}"><h4><span class="badge">{{ id }}</span> {{ title }}</h4></a>
+      <a href="{{ @root.host }}{{ link.url }}">{{ link.url }}</a>
+    </li>
+  {{/each}}
+  </ul>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

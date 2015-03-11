@@ -25,7 +25,7 @@
   <ul class="list-group">
   {{#each results.values}}
     <li class="list-group-item">
-      <a href="./{{ slug title }}"><h4><span class="badge">{{ id }}</span> {{ title }}</h4></a>
+      <a href="./{{ slug fromRef.displayId }}"><h4><span class="badge">{{ id }}</span> {{ title }}</h4></a>
       <a href="{{ @root.host }}{{ link.url }}">{{ link.url }}</a>
     </li>
   {{/each}}

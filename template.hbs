@@ -11,7 +11,22 @@
 
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <style>
+    .glyphicon.spinning {
+      animation: spin 1s infinite linear;
+      -webkit-animation: spin2 1s infinite linear;
+    }
 
+    @keyframes spin {
+      from { transform: scale(1) rotate(0deg);}
+      to { transform: scale(1) rotate(360deg);}
+    }
+
+    @-webkit-keyframes spin2 {
+      from { -webkit-transform: rotate(0deg);}
+      to { -webkit-transform: rotate(360deg);}
+    }
+  </style>
 </head>
 <body>
 <div class="container">
@@ -19,25 +34,73 @@
   <ul class="list-group">
     <li class="list-group-item">
       <a href="./master"><h3>Master</h3></a>
+      <div data-build-json="master">
+        <hr>
+        <span class="glyphicon glyphicon-refresh spinning"></span> Loading commit data...
+      </div>
     </li>
   </ul>
   <h2>Open Pull Requests</h2>
   <ul class="list-group">
-  {{#each results.values}}
+    {{#each results.values}}
     <li class="list-group-item">
       <a href="./{{ slug fromRef.displayId }}"><h4><span class="badge">{{ id }}</span> {{ title }}</h4></a>
       <a href="{{ @root.host }}{{ link.url }}">{{ link.url }}</a>
+      <br>
+      <div data-build-json="{{ slug fromRef.displayId }}">
+        <hr>
+        <span class="glyphicon glyphicon-refresh spinning"></span> Loading commit data...
+      </div>
     </li>
-  {{/each}}
+    {{/each}}
   </ul>
 </div>
+
+<script id="logs-template" type="text/x-handlebars-template">
+  <table class="table">
+    \{{#each this}}
+    <tr>
+      <td>\{{abbrevHash}}</td>
+      <td>\{{committerDate}}</td>
+      <td>\{{subject}}</td>
+    </tr>
+    \{{/each}}
+  </table>
+</script>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('[data-build-json]').each(function() {
+      var elem = $(this);
+      var url = (elem.data('build-json') + '/build.json');
+      var source = $("#logs-template").html();
+      var template = Handlebars.compile(source)
 
+      $.ajax({
+        url: url,
+        success: function(data){
+          var json = data.slice(0, 5);
+          elem.html(template(json));
+        },
+        error: function() {
+          setTimeout(function() {
+            elem.html('<div class="alert alert-warning" role="alert">Could not get commit information</div>');
+          }, 2000);
+
+        },
+        timeout: 5000 //in milliseconds
+      });
+    });
+
+
+  });
+</script>
 
 </body>
 </html>
